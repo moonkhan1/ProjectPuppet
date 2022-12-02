@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     Vector3 direction;
     Animator anim;
-    bool MoveSwitch = false;
+    private bool MoveSwitch = false;
+    [SerializeField] private FloatingJoystick _joystick;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +34,8 @@ public class PlayerController : MonoBehaviour
 
         if (!MoveSwitch)
         {
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
+            horizontal = _joystick.Horizontal;
+            vertical = _joystick.Vertical;
 
             direction = new Vector3(horizontal, 0, vertical);
             anim.SetFloat("Run", direction.magnitude);
@@ -50,8 +52,8 @@ public class PlayerController : MonoBehaviour
 
         else
         {
-            horizontal = -Input.GetAxis("Horizontal");
-            vertical = -Input.GetAxis("Vertical");
+             horizontal = -_joystick.Horizontal;
+            vertical = -_joystick.Vertical;
 
             direction = new Vector3(horizontal, 0, vertical);
             anim.SetFloat("Run", direction.magnitude);
@@ -71,6 +73,12 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchMove()
     {
-        MoveSwitch =!MoveSwitch;
+        MoveSwitch = !MoveSwitch;
+    }
+
+    private void OnTriggerEnter(Collider other) 
+    {
+        
+        
     }
 }

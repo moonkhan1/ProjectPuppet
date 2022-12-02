@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RootMotion.Demos;
+using DG.Tweening;
 public class PickupControl : MonoBehaviour
 {
     bool isPicked = false;
@@ -41,5 +42,31 @@ public class PickupControl : MonoBehaviour
 
         }
 
+    }
+
+
+    private void OnTriggerEnter(Collider other) 
+    {   
+        if(other.CompareTag("DropArea") && isPicked)
+        {
+         hj.connectedBody = null;
+        GetComponent<AnimatorIKDemo>().SwitchPos();
+        // Transform _Dtransform = other.GetComponent<DropArea>()._dropTransform;
+        DropArea _DA = other.GetComponent<DropArea>();
+        Transform _DTrans = _DA._dropTransform;
+         GetComponent<PlayerController>().SwitchMove();
+        _PickedItem.transform.DOJump(_DTrans.position,7,1,0.75f).OnComplete(()=>
+        {
+          _PickedItem.layer = 0;
+         isPicked = false;
+         _PickedItem = null;
+         _DA.TransformMoveOnY();
+         
+        });
+
+
+        }
+
+        
     }
 }
